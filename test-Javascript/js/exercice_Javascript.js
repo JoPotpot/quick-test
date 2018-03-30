@@ -1,33 +1,55 @@
-function ajaxGet(url, callback) {
+function ajaxGet(url) {
     var req = new XMLHttpRequest();
+    var jsonText = "";
+    var codeRetour = 0;
+    
+    
     req.open("GET", url);
     req.addEventListener("load", function () {
         if (req.status >= 200 && req.status < 400) {
-            callback(req.responseText);
+            jsonText=req.responseText;
         } else {
             console.error(req.status + " " + req.statusText + " " + url);
+            codeRetour = req.status;
         }
     });
     req.addEventListener("error", function () {
         console.error("Erreur réseau avec l'URL " + url);
     });
     req.send(null);
-    return req.status;
+    
+//    return [jsonText,codeRetour];
+    return jsonText;
 }
 
-function printInHTML(XMLResponse){
-  var json_content=JSON.parse(XMLResponse);  
-  var fetch1Elt = document.createElement("li"); 
-   //fetch1Elt.textContent = json_content.body ;
-   //fetch1Elt.textContent = JSON.stringify(json_content, null, 4);
-  fetch1Elt.textContent = XMLResponse
-  document.getElementById("titre").appendChild(fetch1Elt);  
+function printInHTML(text){
+  var json_content=JSON.parse(text);  
+  var newElt = document.createElement("li"); 
+
+  newElt.textContent = json_content.body
+  document.getElementById("titre").appendChild(newElt);  
 }
 
-function inTable(table,i) {}
+
+function printError(numError){
+  var errorElt = document.createElement("li"); 
+  errorElt.textContent = numError;
+  document.getElementById("titre").appendChild(errorElt);  
+}
+
 
 
 var json = [];
+var ret = [];
 for (var i=1;i<4; i++){
-ajaxGet("https://jsonplaceholder.typicode.com/posts/"+String(i), printInHTML);
-        }
+   json[i] =ajaxGet("https://jsonplaceholder.typicode.com/posts/"+String(i));
+}
+
+for (var i=1;i<4; i++){
+//    if (ret[i]===0) {
+        printInHTML(json[i])
+//    } else {
+//        printError(ret[i]); 
+//    }
+    
+}
