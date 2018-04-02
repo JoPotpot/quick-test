@@ -2,7 +2,6 @@
 #-*- coding: utf-8 -*-
 
 import requests
-import json
 
 f = open('../output/liste_100_posts.json','w')
 f.write('Liste_des_100_premiers_posts_depuis_https://jsonplaceholder.typicode.com/posts')
