@@ -1,15 +1,30 @@
 #!/usr/bin/python2.7
 #-*- coding: utf-8 -*-
+# à lancer avec l'argument nb_articles
+# exemple : "python exercice_python.py 100" si on veut récupérer 100 articles 
+# fichier json généré à récupérer sous quick-test/test-python/output/
+
+#Liste des 100 premiers posts depuis https://jsonplaceholder.typicode.com/posts'
 
 import requests
+import json
+import sys
 
-f = open('../output/liste_100_posts.json','w')
-f.write('Liste_des_100_premiers_posts_depuis_https://jsonplaceholder.typicode.com/posts')
+nb_articles = int(sys.argv[1])
+file = open('../output/liste_100_posts.json','w')
 
-for i in range (1,101):
-	r = requests.get('https://jsonplaceholder.typicode.com/posts/'+str(i))
 
-	f.write('\n')
-	f.write(str(r.json())) 
+jsonText = requests.get('https://jsonplaceholder.typicode.com/posts/1').json()
+file.write('[\n')
+file.write(json.dumps(jsonText))
 
-f.close()
+for i in range (2,nb_articles+1):
+
+	jsonText = requests.get('https://jsonplaceholder.typicode.com/posts/'+str(i)).json()
+	file.write(',\n')
+	file.write(json.dumps(jsonText))
+
+	
+	
+file.write('\n]')
+file.close()
